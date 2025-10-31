@@ -1,1 +1,80 @@
-<full contents as previously provided>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>SevenO’Clock Drop</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body { font-family: 'Segoe UI', Arial, sans-serif; background: #f9f9f9; text-align: center; margin: 0; padding: 2em; }
+    #potDisplay { font-size: 2em; margin: 1em 0; font-weight: bold; }
+    .btn { display: block; margin: 1em auto; padding: 1em 2em; font-size: 1em; border-radius: 8px; border: none; background: #3b82f6; color: white; cursor: pointer; transition: background 0.2s; }
+    .btn:hover { background: #2563eb; }
+    .tiers { margin-top: 2em; }
+  </style>
+</head>
+<body>
+  <h1>SevenO’Clock Drop</h1>
+  <div>
+    <div id="potDisplay">Loading pot…</div>
+    <button class="btn" onclick="claimFree()">Claim Free Entry</button>
+    <div class="tiers">
+      <button class="btn" onclick="enterTier(1)">Tier 1 (1 Pi, 10 entries)</button>
+      <button class="btn" onclick="enterTier(2)">Tier 2 (5 Pi, 60 entries)</button>
+      <button class="btn" onclick="enterTier(3)">Tier 3 (10 Pi, 150 entries)</button>
+    </div>
+  </div>
+  <script>
+    async function claimFree() {
+      try {
+        const res = await fetch('/claimFreeEntry', { method: 'POST' });
+        if (res.ok) {
+          alert('Free entry claimed!');
+          fetchPot();
+        } else {
+          alert('Failed to claim free entry.');
+        }
+      } catch (err) {
+        alert('Error: ' + err.message);
+      }
+    }
+
+    async function enterTier(tier) {
+      try {
+        const res = await fetch('/enterDrop', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({ tier })
+        });
+        if (res.ok) {
+          alert('Entry submitted!');
+          fetchPot();
+        } else {
+          alert('Failed to enter drop.');
+        }
+      } catch (err) {
+        alert('Error: ' + err.message);
+      }
+    }
+
+    async function fetchPot() {
+      try {
+        // Replace with your Firestore fetch logic or endpoint
+        // Example: GET /potTotal returns {pot: 123.45}
+        const res = await fetch('/potTotal');
+        if (res.ok) {
+          const data = await res.json();
+          document.getElementById('potDisplay').textContent = `Current Pot: ${data.pot} Pi`;
+        } else {
+          document.getElementById('potDisplay').textContent = 'Unable to fetch pot total.';
+        }
+      } catch (err) {
+        document.getElementById('potDisplay').textContent = 'Error fetching pot.';
+      }
+    }
+
+    // Initial fetch + auto-refresh
+    fetchPot();
+    setInterval(fetchPot, 30000);
+  </script>
+</body>
+</html>
