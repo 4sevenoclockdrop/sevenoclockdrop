@@ -1,0 +1,16 @@
+{
+  "name": "sevenoclockdrop-functions",
+  "description": "Firebase Functions backend for SevenO’Clock Drop",
+  "main": "index.js",
+  "scripts": {
+    "start": "firebase emulators:start --only functions",
+    "deploy": "firebase deploy --only functions"
+  },
+  "dependencies": {
+    "firebase-admin": "^11.11.0",
+    "firebase-functions": "^4.5.0"
+  },
+  "engines": {
+    "node": "18"
+  }
+}
