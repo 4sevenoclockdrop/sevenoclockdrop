@@ -1,8 +1,27 @@
-export default function handler(req, res) {
+import { createClient } from '@supabase/supabase-js';
+
+const supabase = createClient(
+  process.env.SUPABASE_URL,
+  process.env.SUPABASE_SERVICE_KEY
+);
+
+export default async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).end();
   }
 
-  // For now just confirm Pi auth reached backend
+  const { pi_uid, username } = req.body;
+
+  const { error } = await supabase
+    .from('users')
+    .upsert({
+      pi_uid,
+      username
+    });
+
+  if (error) {
+    return res.status(500).json(error);
+  }
+
   res.status(200).json({ success: true });
 }
