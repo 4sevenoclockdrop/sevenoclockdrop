@@ -1,31 +1,22 @@
-export default function Home() {
-  const loginWithPi = async () => {
-    if (!window.Pi) {
-      alert('Open this app in Pi Browser');
-      return;
-    }
+const loginWithPi = async () => {
+  if (!window.Pi) {
+    alert('Open this app in Pi Browser');
+    return;
+  }
 
-    const scopes = ['username', 'payments'];
-    const auth = await window.Pi.authenticate(
-      scopes,
-      () => console.log('Incomplete payment')
-    );
+  const scopes = ['username', 'payments'];
 
-    await fetch('/api/auth', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(auth)
-    });
+  const authResult = await window.Pi.authenticate(scopes);
 
-    alert('Logged in with Pi!');
-  };
+  // SEND ONLY WHAT BACKEND NEEDS
+  await fetch('/api/auth', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      pi_uid: authResult.user.uid,
+      username: authResult.user.username
+    })
+  });
 
-  return (
-    <div style={{ padding: 20 }}>
-      <h1>Seven O’Clock Drop</h1>
-      <button onClick={loginWithPi}>
-        Login with Pi
-      </button>
-    </div>
-  );
-}
+  alert('Logged in with Pi!');
+};
