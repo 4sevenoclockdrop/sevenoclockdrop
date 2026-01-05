@@ -1,31 +1,7 @@
-import { createClient } from '@supabase/supabase-js';
+import '../styles/globals.css';
 
-const supabase = createClient(
-  process.env.SUPABASE_URL,
-  process.env.SUPABASE_SERVICE_KEY
-);
-
-export default async function handler(req, res) {
-  if (req.method !== 'POST') {
-    return res.status(405).end();
-  }
-
-  const { pi_uid, username } = req.body;
-
-  if (!pi_uid) {
-    return res.status(400).json({ error: 'Missing pi_uid' });
-  }
-
-  const { error } = await supabase
-    .from('users')
-    .upsert({
-      pi_uid,
-      username
-    });
-
-  if (error) {
-    return res.status(500).json(error);
-  }
-
-  res.status(200).json({ success: true });
+function MyApp({ Component, pageProps }) {
+  return <Component {...pageProps} />;
 }
+
+export default MyApp;
