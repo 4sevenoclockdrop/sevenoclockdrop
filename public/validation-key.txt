@@ -1,0 +1,6 @@
+sevenoclockdrop/
+├── pages/
+├── public/
+│   └── validation-key.txt   ✅
+├── package.json
+└── next.config.js (maybe)
