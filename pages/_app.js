@@ -1,7 +1,13 @@
-import '../styles/globals.css';
+import Script from "next/script";
 
-function MyApp({ Component, pageProps }) {
-  return <Component {...pageProps} />;
+export default function MyApp({ Component, pageProps }) {
+  return (
+    <>
+      <Script
+        src="https://sdk.minepi.com/pi-sdk.js"
+        strategy="beforeInteractive"
+      />
+      <Component {...pageProps} />
+    </>
+  );
 }
-
-export default MyApp;
